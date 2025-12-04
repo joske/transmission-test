@@ -1,0 +1,10 @@
+[package]
+name = "transmission-test"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bip_metainfo = "0.12"
+tokio = { version = "1", features = ["full"] }
+transmission-client = "0.1.6"
+url = "2.5"
