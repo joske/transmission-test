@@ -1,6 +1,4 @@
 use bip_metainfo::{MetainfoBuilder, PieceLength};
-
-#[allow(dead_code)]
 /// Create a torrent file from a folder.
 pub fn create_torrent_file(folder: &str, output_file: &str) {
     let builder = MetainfoBuilder::new()
@@ -10,7 +8,7 @@ pub fn create_torrent_file(folder: &str, output_file: &str) {
     std::fs::write(output_file, bytes).unwrap();
 }
 
-#[allow(dead_code)]
+#[allow(async_fn_in_trait)]
 pub trait BitTorrent {
     /// Add a torrent file to Transmission. The torrents starts downloading/seeding immediately.
     async fn add(&self, torrent_file: &str) -> Torrent;
@@ -24,7 +22,6 @@ pub trait BitTorrent {
     async fn stats(&self) -> SessionStats;
 }
 
-#[allow(dead_code)]
 #[derive(Debug)]
 pub struct SessionStats {
     pub active_torrent_count: i32,
@@ -36,7 +33,6 @@ pub struct SessionStats {
     pub upload_speed: i32,
 }
 
-#[allow(dead_code)]
 #[derive(Debug)]
 pub struct StatsDetails {
     pub downloaded_bytes: i64,
@@ -46,7 +42,6 @@ pub struct StatsDetails {
     pub uploaded_bytes: i64,
 }
 
-#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Torrent {
     pub id: i32,
