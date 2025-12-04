@@ -2,7 +2,7 @@ use bip_metainfo::{MetainfoBuilder, PieceLength};
 
 #[allow(dead_code)]
 /// Create a torrent file from a folder.
-fn create_torrent_file(folder: &str, output_file: &str) {
+pub fn create_torrent_file(folder: &str, output_file: &str) {
     let builder = MetainfoBuilder::new()
         .set_piece_length(PieceLength::OptBalanced)
         .set_main_tracker(Some("udp://tracker.opentrackr.org:1337/announce"));
