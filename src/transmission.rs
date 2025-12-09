@@ -11,15 +11,23 @@ pub struct TransmissionClient {
 }
 
 impl TransmissionClient {
-    /// Create a new TransmissionClient. If no URL is provided, it defaults to "http://localhost:9091/transmission/rpc".
-    /// method is async as the session settings are applied on creation.
-    pub async fn new(url: Option<&str>, incomplete_dir: Option<&str>) -> Self {
-        let url = Url::parse(url.unwrap_or("http://localhost:9091/transmission/rpc")).unwrap();
+    /// Create a new TransmissionClient.
+    /// If no RPC URL is provided, it defaults to "http://localhost:9091/transmission/rpc".
+    /// This method is async as the session settings are applied on creation.
+    /// An incomplete directory can also be specified. If None is provided, it defaults to "/tmp/transmission/incomplete".
+    pub async fn new(
+        rpc_url: Option<&str>,
+        incomplete_dir: Option<&str>,
+        max_downloads: u32,
+    ) -> Self {
+        let url = Url::parse(rpc_url.unwrap_or("http://localhost:9091/transmission/rpc")).unwrap();
         let client = Client::new(url);
         let incomplete_dir = incomplete_dir.unwrap_or("/tmp/transmission/incomplete");
         let session_mutator = SessionMutator {
             incomplete_dir_enabled: Some(true),
             incomplete_dir: Some(incomplete_dir.into()),
+            download_queue_enabled: Some(true),
+            download_queue_size: Some(max_downloads as i32),
             ..Default::default()
         };
         client.session_set(session_mutator).await.unwrap();

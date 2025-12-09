@@ -2,7 +2,7 @@ use transmission_test::{torrent::BitTorrent, *};
 
 #[tokio::main]
 async fn main() {
-    let client = transmission::TransmissionClient::new(None, None).await;
+    let client = transmission::TransmissionClient::new(None, None, 5).await;
     let torrent = client
         .add(
             "/home/jos/Downloads/GhostBSD-25.02-R14.3p2-GERSHWIN.iso.torrent",
