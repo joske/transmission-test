@@ -1,6 +1,6 @@
 use transmission_client::{
-    Client, SessionStats as TransmissionSessionStats, StatsDetails as TransmissionStatsDetails,
-    Torrent as TransmissionTorrent,
+    Client, SessionMutator, SessionStats as TransmissionSessionStats,
+    StatsDetails as TransmissionStatsDetails, Torrent as TransmissionTorrent,
 };
 use url::Url;
 
@@ -11,9 +11,18 @@ pub struct TransmissionClient {
 }
 
 impl TransmissionClient {
-    pub fn new(url: Option<&str>) -> Self {
+    /// Create a new TransmissionClient. If no URL is provided, it defaults to "http://localhost:9091/transmission/rpc".
+    /// method is async as the session settings are applied on creation.
+    pub async fn new(url: Option<&str>, incomplete_dir: Option<&str>) -> Self {
         let url = Url::parse(url.unwrap_or("http://localhost:9091/transmission/rpc")).unwrap();
         let client = Client::new(url);
+        let incomplete_dir = incomplete_dir.unwrap_or("/tmp/transmission/incomplete");
+        let session_mutator = SessionMutator {
+            incomplete_dir_enabled: Some(true),
+            incomplete_dir: Some(incomplete_dir.into()),
+            ..Default::default()
+        };
+        client.session_set(session_mutator).await.unwrap();
         Self { client }
     }
 }
