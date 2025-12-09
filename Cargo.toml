@@ -6,5 +6,5 @@ edition = "2024"
 [dependencies]
 bip_metainfo = "0.12"
 tokio = { version = "1", features = ["full"] }
-transmission-client = "0.1.6"
+transmission-client = { git = "https://github.com/joske/transmission-client.git", branch = "master" }
 url = "2.5"

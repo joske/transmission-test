@@ -19,9 +19,9 @@ impl TransmissionClient {
 }
 
 impl BitTorrent for TransmissionClient {
-    async fn add(&self, torrent_file: &str) -> Torrent {
+    async fn add(&self, torrent_file: &str, download_dir: &str) -> Torrent {
         self.client
-            .torrent_add_filename(torrent_file)
+            .torrent_add_filename_download_dir(torrent_file, download_dir)
             .await
             .unwrap()
             .unwrap()
