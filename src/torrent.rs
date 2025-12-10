@@ -1,5 +1,7 @@
 use bip_metainfo::{MetainfoBuilder, PieceLength};
+
 /// Create a torrent file from a folder.
+/// This is not BitTorrent client specific, so it is not part of the BitTorrent trait.
 pub fn create_torrent_file(folder: &str, output_file: &str) {
     let builder = MetainfoBuilder::new()
         .set_piece_length(PieceLength::OptBalanced)
@@ -11,6 +13,7 @@ pub fn create_torrent_file(folder: &str, output_file: &str) {
 #[allow(async_fn_in_trait)]
 pub trait BitTorrent {
     /// Add a torrent file to Transmission. The torrents starts downloading/seeding immediately.
+    /// This can be used to download a torrent, and also to seed a torrent.
     async fn add(&self, torrent_file: &str, download_dir: &str) -> Torrent;
     /// Stop torrents by their IDs. The IDs should be the torrent hash.
     async fn stop(&self, ids: Vec<String>);
@@ -21,6 +24,9 @@ pub trait BitTorrent {
     /// Get session statistics.
     async fn stats(&self) -> SessionStats;
 }
+
+// The below are copied from Transmission RPC types, as this will be the initial implementation.
+// Other implementations are expected to be similar.
 
 #[derive(Debug)]
 pub struct SessionStats {
